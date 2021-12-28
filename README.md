@@ -1,5 +1,1 @@
-# chrome-commands
-
-## TODO
-
-- Add command to open editor
+# quick-commands
