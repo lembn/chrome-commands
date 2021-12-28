@@ -1,2 +1,5 @@
 # chrome-commands
-A chrome extension to quickly open multiple tabs
+
+## TODO
+
+- Add command to open editor
