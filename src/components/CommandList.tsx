@@ -41,7 +41,7 @@ export default observer(
         {commands.map((command: Command) => {
           return (
             <li key={command.commandId}>
-              <RiArrowDropRightLine />
+              <RiArrowDropRightLine onClick={command.toggleExpansion} />
 
               <Input
                 placeholder="command"
@@ -59,28 +59,30 @@ export default observer(
 
               {/* List of URLs */}
               <ul>
-                {command
-                  .getURLs()
-                  .map(([URLID, URL]: [URLID: number, URL: string]) => {
-                    return (
-                      <li key={URLID}>
-                        <Input
-                          placeholder="url"
-                          value={URL}
-                          setValue={(value) => command.setURL(URLID, value)}
-                          _ref={
-                            focusOptions.targetType == "url" &&
-                            focusOptions.targetId == command.commandId &&
-                            URLID == command.getURLs()[command.URLs.size - 1][0]
-                              ? focusTarget
-                              : undefined
-                          }
-                        />
+                {command.expanded &&
+                  command
+                    .getURLs()
+                    .map(([URLID, URL]: [URLID: number, URL: string]) => {
+                      return (
+                        <li key={URLID}>
+                          <Input
+                            placeholder="url"
+                            value={URL}
+                            setValue={(value) => command.setURL(URLID, value)}
+                            _ref={
+                              focusOptions.targetType == "url" &&
+                              focusOptions.targetId == command.commandId &&
+                              URLID ==
+                                command.getURLs()[command.URLs.size - 1][0]
+                                ? focusTarget
+                                : undefined
+                            }
+                          />
 
-                        <TiDelete onClick={() => command.removeURL(URLID)} />
-                      </li>
-                    );
-                  })}
+                          <TiDelete onClick={() => command.removeURL(URLID)} />
+                        </li>
+                      );
+                    })}
 
                 {/* New URL */}
                 <Input
