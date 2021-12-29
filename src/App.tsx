@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
-import CommandListView from "./components/CommandListView";
-import Input from "./components/Input";
+import CommandList from "./components/CommandList";
+import Search from "./components/Search";
 import AppState from "./data/AppState";
 import Command from "./data/Command";
 
@@ -16,13 +16,12 @@ const appState = new AppState([
 export default observer(() => {
   return (
     <>
-      <Input
-        placeholder="search..."
-        value={appState.searchText}
-        setValue={appState.setSearchText}
+      <Search value={appState.searchText} setValue={appState.setSearchText} />
+      <CommandList
+        commands={appState.commands}
+        addCommand={appState.addCommand}
+        removeCommand={appState.removeCommand}
       />
-
-      <CommandListView commands={appState.commands} />
     </>
   );
 });

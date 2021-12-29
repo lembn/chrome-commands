@@ -2,19 +2,18 @@
 
 ## TODO
 
-- Add new command/new URL functionality
-  - An empty input feild that:
-    - Spawns a new item at the bottom of the list `onBeforeInput`
-    - Moves focus onto new element
-    - Continues typing there
-  - Look into react-spring "transitions" to make the spawning of new elements smoother
+- Make lists expand and collapse
 - Add delete buttons
-  - delete animation (fade, swipe, strikethrough?)
+- Make the popup close on search
+
 - Add suggestions to SEARCH input feild
+
+- Animate expand and collapse
+- delete animation (fade, swipe, strikethrough?)
+- Look into react-spring "transitions" to make the spawning of new elements smoother
 - Styling
   - Themes
   - Make font look like code, monospace?
-- Make the popup close on search
 - UI is done
 
 - Implement tab creation

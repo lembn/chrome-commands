@@ -1,25 +1,35 @@
-import { makeAutoObservable } from "mobx";
+import { makeObservable, observable, action } from "mobx";
 
 export default class Command {
-  static EMPTY: () => Command = () => new Command("", []);
   static commandCounter: number = 0;
 
   commandId: number = 0;
   commandText: string;
-  URLs: Map<number, string> = new Map<number, string>();
+  URLs: Map<number, string>;
+  edited: boolean = false;
   expanded: boolean = false;
 
-  constructor(command: string, URLs: string[]) {
-    makeAutoObservable(this);
+  constructor(command?: string, URLs?: string[]) {
+    makeObservable(this, {
+      commandText: observable,
+      URLs: observable,
+      edited: observable,
+      expanded: observable,
+      setCommandText: action,
+      setURL: action,
+      toggleExpansion: action,
+    });
 
     this.commandId = Command.commandCounter;
     Command.commandCounter++;
 
-    this.commandText = command;
-    for (let i = 0; i < URLs.length; i++) this.URLs.set(i, URLs[i]);
+    this.commandText = command || "";
+    this.URLs = new Map<number, string>();
+    if (URLs) for (let i = 0; i < URLs.length; i++) this.URLs.set(i, URLs[i]);
 
     this.setCommandText = this.setCommandText.bind(this);
-    this.mapURLs = this.mapURLs.bind(this);
+    this.setURL = this.setURL.bind(this);
+    this.getURLs = this.getURLs.bind(this);
     this.toggleExpansion = this.toggleExpansion.bind(this);
   }
 
@@ -27,12 +37,12 @@ export default class Command {
     this.commandText = command;
   }
 
-  mapURLs(cb: (URLID: number) => any) {
-    let results: any[] = [];
-    for (const key of this.URLs.keys()) {
-      results.push(cb(key));
-    }
-    return results;
+  setURL(URLID: number, URL: string) {
+    this.URLs.set(URLID, URL);
+  }
+
+  getURLs(): [number, string][] {
+    return [...this.URLs.entries()];
   }
 
   toggleExpansion() {

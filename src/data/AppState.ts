@@ -1,53 +1,49 @@
-import { makeAutoObservable } from "mobx";
+import { makeObservable, observable, action } from "mobx";
 import Command from "./Command";
 
 export default class AppState {
   searchText: string = "";
   commands: Command[];
 
-  constructor(commands: Command[] = []) {
-    makeAutoObservable(this);
-    this.commands = commands;
+  constructor(commands?: Command[]) {
+    makeObservable(this, {
+      searchText: observable,
+      commands: observable,
+      setSearchText: action,
+      addCommand: action,
+      removeCommand: action,
+    });
+
+    this.commands = commands || [];
+
     this.setSearchText = this.setSearchText.bind(this);
-    this.search = this.search.bind(this);
     this.addCommand = this.addCommand.bind(this);
     this.removeCommand = this.removeCommand.bind(this);
-    this.getCommand = this.getCommand.bind(this);
+    this.search = this.search.bind(this);
   }
 
   setSearchText(searchText: string) {
-    this.searchText = searchText;
-  }
-
-  search() {
-    const command = this.getCommand(this.searchText.trim().toLowerCase());
-    if (command == Command.EMPTY()) {
-      // command is empty
-      console.log("command was empty");
-    } else {
-      //tabs can be opened
-      console.log(
-        command.mapURLs((URLID: number) => console.log(command.URLs.get(URLID)))
-      );
-    }
+    this.searchText = searchText.trim().toLowerCase();
   }
 
   addCommand(command: Command) {
-    if (command.commandText && command.URLs.has(0)) this.commands.push(command);
-  }
-
-  getCommand(searchText: string): Command {
-    if (searchText) {
-      for (const command of this.commands) {
-        if (command.commandText == searchText) return command;
-      }
-    }
-
-    return Command.EMPTY();
+    this.commands.push(command);
   }
 
   removeCommand(command: Command) {
     const index = this.commands.indexOf(command);
     this.commands.splice(index, 1);
+  }
+
+  search() {
+    if (this.searchText) {
+      for (const command of this.commands) {
+        if (command.commandText == this.searchText) {
+          //tabs can be opened
+        }
+      }
+    }
+
+    //command is empty
   }
 }
