@@ -2,9 +2,7 @@
 
 ## TODO
 
-- Make lists expand and collapse
-- Add delete buttons
-- Make the popup close on search
+- Make search listen for enter key
 
 - Add suggestions to SEARCH input feild
 

@@ -40,6 +40,7 @@ export default class AppState {
       for (const command of this.commands) {
         if (command.commandText == this.searchText) {
           //tabs can be opened
+          window.close();
         }
       }
     }
