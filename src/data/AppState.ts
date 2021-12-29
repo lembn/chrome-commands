@@ -36,6 +36,8 @@ export default class AppState {
   }
 
   search() {
+    console.log("searching");
+
     if (this.searchText) {
       for (const command of this.commands) {
         if (command.commandText == this.searchText) {

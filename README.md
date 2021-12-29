@@ -2,9 +2,10 @@
 
 ## TODO
 
-- Make search listen for enter key
-
 - Add suggestions to SEARCH input feild
+
+- Implement tab creation
+- Implement saving
 
 - Animate expand and collapse
 - delete animation (fade, swipe, strikethrough?)
@@ -13,9 +14,6 @@
   - Themes
   - Make font look like code, monospace?
 - UI is done
-
-- Implement tab creation
-- Implement saving
 
 ---
 

@@ -16,7 +16,11 @@ const appState = new AppState([
 export default observer(() => {
   return (
     <>
-      <Search value={appState.searchText} setValue={appState.setSearchText} />
+      <Search
+        value={appState.searchText}
+        setValue={appState.setSearchText}
+        action={appState.search}
+      />
       <CommandList
         commands={appState.commands}
         addCommand={appState.addCommand}
