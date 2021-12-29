@@ -30,6 +30,7 @@ export default class Command {
     this.setCommandText = this.setCommandText.bind(this);
     this.setURL = this.setURL.bind(this);
     this.getURLs = this.getURLs.bind(this);
+    this.removeURL = this.removeURL.bind(this);
     this.toggleExpansion = this.toggleExpansion.bind(this);
   }
 
@@ -43,6 +44,10 @@ export default class Command {
 
   getURLs(): [number, string][] {
     return [...this.URLs.entries()];
+  }
+
+  removeURL(URLID: number) {
+    this.URLs.delete(URLID);
   }
 
   toggleExpansion() {

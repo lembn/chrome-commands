@@ -19,17 +19,19 @@ export default observer(
     _ref?: MutableRefObject<null>;
   }) => {
     return (
-      <input
-        type="text"
-        placeholder={placeholder}
-        value={value}
-        onChange={
-          setValue ? (event) => setValue(event.target.value) : undefined
-        }
-        onKeyPress={onKeyPress}
-        readOnly={readOnly}
-        ref={_ref}
-      />
+      <>
+        <input
+          type="text"
+          placeholder={placeholder}
+          value={value}
+          onChange={
+            setValue ? (event) => setValue(event.target.value) : undefined
+          }
+          onKeyPress={onKeyPress}
+          readOnly={readOnly}
+          ref={_ref}
+        />
+      </>
     );
   }
 );

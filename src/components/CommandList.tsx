@@ -2,6 +2,8 @@ import { observer } from "mobx-react-lite";
 import Command from "../data/Command";
 import Input from "./Input";
 import { useEffect, useRef } from "react";
+import { RiArrowDropRightLine } from "react-icons/ri";
+import { TiDelete } from "react-icons/ti";
 
 let focusOptions: {
   targetType: "command" | "url";
@@ -39,6 +41,8 @@ export default observer(
         {commands.map((command: Command) => {
           return (
             <li key={command.commandId}>
+              <RiArrowDropRightLine />
+
               <Input
                 placeholder="command"
                 value={command.commandText}
@@ -50,6 +54,8 @@ export default observer(
                     : undefined
                 }
               />
+
+              <TiDelete onClick={() => removeCommand(command)} />
 
               {/* List of URLs */}
               <ul>
@@ -70,6 +76,8 @@ export default observer(
                               : undefined
                           }
                         />
+
+                        <TiDelete onClick={() => command.removeURL(URLID)} />
                       </li>
                     );
                   })}
