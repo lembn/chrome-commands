@@ -2,8 +2,15 @@
 
 ## TODO
 
-- Add suggestions to SEARCH input feild
-- underscore caret?
+- Apply new techniequs to CommandList component
+
+- Add functionality to create/add new command from search bar if search not found
+
+  - Move CommandList.focusOptions into class in App so it can be passed to Search
+
+- close on search
+
+- mark getters and setters for mobx
 
   - https://css-tricks.com/almanac/properties/c/caret-shape/
 

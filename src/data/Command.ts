@@ -1,4 +1,4 @@
-import { makeObservable, observable, action } from "mobx";
+import { makeAutoObservable } from "mobx";
 
 export default class Command {
   static commandCounter: number = 0;
@@ -8,17 +8,10 @@ export default class Command {
   URLs: Map<number, string>;
   edited: boolean = false;
   expanded: boolean = false;
+  lastUsed: Date;
 
   constructor(command?: string, URLs?: string[]) {
-    makeObservable(this, {
-      commandText: observable,
-      URLs: observable,
-      edited: observable,
-      expanded: observable,
-      setCommandText: action,
-      setURL: action,
-      toggleExpansion: action,
-    });
+    makeAutoObservable(this);
 
     this.commandId = Command.commandCounter;
     Command.commandCounter++;
@@ -35,7 +28,7 @@ export default class Command {
   }
 
   setCommandText(command: string) {
-    this.commandText = command;
+    this.commandText = command.toLowerCase().replace("  ", " ");
   }
 
   setURL(URLID: number, URL: string) {
@@ -52,5 +45,9 @@ export default class Command {
 
   toggleExpansion() {
     this.expanded = !this.expanded;
+  }
+
+  setLastUsed() {
+    this.lastUsed = new Date();
   }
 }

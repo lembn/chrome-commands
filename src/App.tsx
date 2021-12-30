@@ -12,22 +12,43 @@ const commandListData = new CommandListData([
     "dev-wallet.zilliqa.com/faucet?network=testnet",
     "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
   ]),
+  new Command("really long command name ahhhhhh"),
+  new Command("lots of links!", [
+    "https://ide.zilliqa.com/#/",
+    "dev-wallet.zilliqa.com/faucet?network=testnet",
+    "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
+    "https://ide.zilliqa.com/#/",
+    "dev-wallet.zilliqa.com/faucet?network=testnet",
+    "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
+  ]),
+  new Command("lots of links!", [
+    "https://ide.zilliqa.com/#/",
+    "dev-wallet.zilliqa.com/faucet?network=testnet",
+    "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
+    "https://ide.zilliqa.com/#/",
+    "dev-wallet.zilliqa.com/faucet?network=testnet",
+    "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
+  ]),
+  new Command("lots of links!", [
+    "https://ide.zilliqa.com/#/",
+    "dev-wallet.zilliqa.com/faucet?network=testnet",
+    "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
+    "https://ide.zilliqa.com/#/",
+    "dev-wallet.zilliqa.com/faucet?network=testnet",
+    "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
+  ]),
 ]);
-const searchData = new SearchData();
+const searchData = new SearchData(commandListData.commands);
+
+function search(command: Command) {
+  console.log(command.commandText);
+}
 
 export default observer(() => {
   return (
     <>
-      <Search
-        value={searchData.query}
-        setValue={searchData.setQuery}
-        action={() => commandListData.search(searchData.query)}
-      />
-      <CommandList
-        commands={commandListData.commands}
-        add={commandListData.add}
-        remove={commandListData.remove}
-      />
+      <Search data={searchData} search={search} />
+      <CommandList data={commandListData} />
     </>
   );
 });

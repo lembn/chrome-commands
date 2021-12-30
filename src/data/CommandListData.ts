@@ -29,7 +29,7 @@ export default class CommandListData {
 
   search(searchText: string) {
     console.log("searching");
-    searchText.trim();
+    searchText = searchText.trim().toLowerCase();
 
     if (searchText) {
       for (const command of this.commands) {
