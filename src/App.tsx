@@ -45,6 +45,7 @@ const focusOptions = new FocusOptions();
 
 function search(command: Command) {
   console.log(command.commandText);
+  window.close();
 }
 
 export default observer(() => {
