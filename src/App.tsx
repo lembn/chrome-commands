@@ -5,6 +5,12 @@ import CommandListData from "./data/CommandListData";
 import SearchData from "./data/SearchData";
 import Command from "./data/Command";
 import FocusOptions from "./data/FocusOptions";
+import styled from "styled-components";
+import Scrollbar from "./components/styles/Scrollbar";
+
+const AppContainer = styled.div`
+  ${Scrollbar}
+`;
 
 const commandListData = new CommandListData([
   new Command("yt", ["youtube.com"]),
@@ -40,19 +46,13 @@ const commandListData = new CommandListData([
   ]),
 ]);
 const searchData = new SearchData(commandListData.commands);
-
 const focusOptions = new FocusOptions();
-
-function search(command: Command) {
-  console.log(command.commandText);
-  window.close();
-}
 
 export default observer(() => {
   return (
-    <>
-      <Search data={searchData} search={search} focusOptions={focusOptions} />
+    <AppContainer>
+      <Search data={searchData} />
       <CommandList data={commandListData} focusOptions={focusOptions} />
-    </>
+    </AppContainer>
   );
 });

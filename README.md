@@ -2,7 +2,6 @@
 
 ## TODO
 
-- Implement tab creation
 - Implement saving
 
 ---

@@ -102,133 +102,131 @@ const WarningMessage = styled.span`
   color: #a1a1a1;
 `;
 
-export default observer(
-  ({
-    data,
-    focusOptions,
-    search,
-  }: {
-    data: SearchData;
-    focusOptions: FocusOptions;
-    search: (command: Command) => void;
-  }) => {
-    const searchBarContainerRef = useRef(null);
-    const activeCommandRef = useRef(null);
-    const clickedOutside = useOutsideClick(searchBarContainerRef);
-    const searchBarContainerStyles = useSpring({
-      config: { mass: 1, tension: 500, friction: 30 },
-      to: {
-        height: data.expanded ? "20em" : initialContainerHeight,
-      },
-    });
+export default observer(({ data }: { data: SearchData }) => {
+  const searchBarContainerRef = useRef(null);
+  const activeCommandRef = useRef(null);
+  const clickedOutside = useOutsideClick(searchBarContainerRef);
+  const searchBarContainerStyles = useSpring({
+    config: { mass: 1, tension: 500, friction: 30 },
+    to: {
+      height: data.expanded ? "20em" : initialContainerHeight,
+    },
+  });
 
-    const quickFadeIn = useTransition(data.expanded, {
-      config: { duration: 50 },
-      from: { opacity: 0 },
-      enter: { opacity: 1 },
-      leave: { opacity: 0 },
-    });
+  const quickFadeIn = useTransition(data.expanded, {
+    config: { duration: 50 },
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+  });
 
-    function keyDownHandler(event: KeyboardEvent<HTMLInputElement>) {
-      if (data.filteredResults.length == 0) {
-        //create command
-      } else if (event.key === "Enter") {
-        if (data.active > -1) {
-          search(data.filteredResults[data.active]);
-        } else {
-          search(data.filteredResults[0]);
-        }
-      } else if (event.key === "Tab") {
-        if (data.active > -1) {
-          data.setQuery(data.filteredResults[data.active].commandText);
-        } else {
-          data.setQuery(data.filteredResults[0].commandText);
-        }
-      } else if (event.key === "ArrowUp") {
-        if (data.active == -1) data.setActive(data.filteredResults.length - 1);
-        else data.setActive(data.active - 1);
-      } else if (event.key === "ArrowDown") {
-        if (data.active == data.filteredResults.length - 1) data.setActive(-1);
-        else data.setActive(data.active + 1);
-      }
+  function search(command: Command) {
+    for (const [_, URL] of command.getURLs()) {
+      const searchURL = URL.includes("://") ? URL : `https://${URL}`
+      chrome.tabs.create({ url: searchURL, active: false });
     }
-
-    useEffect(() => {
-      if (clickedOutside) data.close();
-    }, [clickedOutside]);
-
-    useEffect(() => {
-      !data.mouseOver &&
-        activeCommandRef.current &&
-        activeCommandRef.current.scrollIntoView({
-          behavior: "smooth",
-        });
-    }, [data.active]);
-
-    return (
-      <SearchBarContainer
-        ref={searchBarContainerRef}
-        style={searchBarContainerStyles}
-        onMouseEnter={() => data.setMouseOver(true)}
-        onMouseLeave={() => {
-          data.setMouseOver(false);
-          data.setActive(-1);
-        }}
-      >
-        <SearchInputContainer>
-          <SearchIcon>
-            <IoSearch />
-          </SearchIcon>
-
-          <SearchInput
-            placeholder="search..."
-            spellCheck="false"
-            autoFocus
-            value={data.query}
-            onFocus={data.open}
-            onKeyDown={keyDownHandler}
-            onChange={(event) => data.setQuery(event.target.value)}
-          />
-
-          {quickFadeIn((styles, toggle) =>
-            toggle ? (
-              <CloseIcon onClick={data.close} style={styles}>
-                <IoClose />
-              </CloseIcon>
-            ) : (
-              ""
-            )
-          )}
-        </SearchInputContainer>
-
-        {data.expanded && <LineSeperator />}
-
-        {data.expanded && (
-          <SearchResults
-            generator={() => {
-              if (data.filteredResults.length > 0)
-                return data.filteredResults.map(
-                  (command: Command, index: number) => (
-                    <Result
-                      key={command.commandId}
-                      command={command}
-                      onClick={search}
-                      onHover={() => data.setActive(index)}
-                      isActive={() => data.active == index}
-                      getRef={() =>
-                        data.active == index + 1 ||
-                        (data.active == -1 && index == 0)
-                          ? activeCommandRef
-                          : undefined
-                      }
-                    />
-                  )
-                );
-              else return <WarningMessage>no commands found</WarningMessage>;
-            }}
-          />
-        )}
-      </SearchBarContainer>
-    );
+    window.close();
   }
-);
+
+  function keyDownHandler(event: KeyboardEvent<HTMLInputElement>) {
+    if (data.filteredResults.length == 0) {
+      //create command
+    } else if (event.key === "Enter") {
+      if (data.active > -1) {
+        search(data.filteredResults[data.active]);
+      } else {
+        search(data.filteredResults[0]);
+      }
+    } else if (event.key === "Tab") {
+      if (data.active > -1) {
+        data.setQuery(data.filteredResults[data.active].commandText);
+      } else {
+        data.setQuery(data.filteredResults[0].commandText);
+      }
+    } else if (event.key === "ArrowUp") {
+      if (data.active == -1) data.setActive(data.filteredResults.length - 1);
+      else data.setActive(data.active - 1);
+    } else if (event.key === "ArrowDown") {
+      if (data.active == data.filteredResults.length - 1) data.setActive(-1);
+      else data.setActive(data.active + 1);
+    }
+  }
+
+  useEffect(() => {
+    if (clickedOutside) data.close();
+  }, [clickedOutside]);
+
+  useEffect(() => {
+    !data.mouseOver &&
+      activeCommandRef.current &&
+      activeCommandRef.current.scrollIntoView({
+        behavior: "smooth",
+      });
+  }, [data.active]);
+
+  return (
+    <SearchBarContainer
+      ref={searchBarContainerRef}
+      style={searchBarContainerStyles}
+      onMouseEnter={() => data.setMouseOver(true)}
+      onMouseLeave={() => {
+        data.setMouseOver(false);
+        data.setActive(-1);
+      }}
+    >
+      <SearchInputContainer>
+        <SearchIcon>
+          <IoSearch />
+        </SearchIcon>
+
+        <SearchInput
+          placeholder="search..."
+          spellCheck="false"
+          autoFocus
+          value={data.query}
+          onFocus={data.open}
+          onKeyDown={keyDownHandler}
+          onChange={(event) => data.setQuery(event.target.value)}
+        />
+
+        {quickFadeIn((styles, toggle) =>
+          toggle ? (
+            <CloseIcon onClick={data.close} style={styles}>
+              <IoClose />
+            </CloseIcon>
+          ) : (
+            ""
+          )
+        )}
+      </SearchInputContainer>
+
+      {data.expanded && <LineSeperator />}
+
+      {data.expanded && (
+        <SearchResults
+          generator={() => {
+            if (data.filteredResults.length > 0)
+              return data.filteredResults.map(
+                (command: Command, index: number) => (
+                  <Result
+                    key={command.commandId}
+                    command={command}
+                    onClick={search}
+                    onHover={() => data.setActive(index)}
+                    isActive={() => data.active == index}
+                    getRef={() =>
+                      data.active == index + 1 ||
+                      (data.active == -1 && index == 0)
+                        ? activeCommandRef
+                        : undefined
+                    }
+                  />
+                )
+              );
+            else return <WarningMessage>no commands found</WarningMessage>;
+          }}
+        />
+      )}
+    </SearchBarContainer>
+  );
+});
