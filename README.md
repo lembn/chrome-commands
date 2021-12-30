@@ -3,6 +3,11 @@
 ## TODO
 
 - Add suggestions to SEARCH input feild
+- underscore caret?
+
+  - https://css-tricks.com/almanac/properties/c/caret-shape/
+
+- Take styling from C:\Users\lembn\OneDrive - UTC Reading\C.S\NEA\TEAMPLNR\public?
 
 - Implement tab creation
 - Implement saving
@@ -19,3 +24,4 @@
 
 - make search faster
 - Where are types supposed to be installed to
+- Delete unused font files

@@ -1,10 +1,11 @@
 import { observer } from "mobx-react-lite";
 import CommandList from "./components/CommandList";
 import Search from "./components/Search";
-import AppState from "./data/AppState";
+import CommandListData from "./data/CommandListData";
+import SearchData from "./data/SearchData";
 import Command from "./data/Command";
 
-const appState = new AppState([
+const commandListData = new CommandListData([
   new Command("yt", ["youtube.com"]),
   new Command("scilla", [
     "https://ide.zilliqa.com/#/",
@@ -12,19 +13,20 @@ const appState = new AppState([
     "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
   ]),
 ]);
+const searchData = new SearchData();
 
 export default observer(() => {
   return (
     <>
       <Search
-        value={appState.searchText}
-        setValue={appState.setSearchText}
-        action={appState.search}
+        value={searchData.query}
+        setValue={searchData.setQuery}
+        action={() => commandListData.search(searchData.query)}
       />
       <CommandList
-        commands={appState.commands}
-        addCommand={appState.addCommand}
-        removeCommand={appState.removeCommand}
+        commands={commandListData.commands}
+        add={commandListData.add}
+        remove={commandListData.remove}
       />
     </>
   );

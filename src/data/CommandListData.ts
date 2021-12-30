@@ -1,46 +1,39 @@
 import { makeObservable, observable, action } from "mobx";
 import Command from "./Command";
 
-export default class AppState {
-  searchText: string = "";
+export default class CommandListData {
   commands: Command[];
 
   constructor(commands?: Command[]) {
     makeObservable(this, {
-      searchText: observable,
       commands: observable,
-      setSearchText: action,
-      addCommand: action,
-      removeCommand: action,
+      add: action,
+      remove: action,
     });
 
     this.commands = commands || [];
 
-    this.setSearchText = this.setSearchText.bind(this);
-    this.addCommand = this.addCommand.bind(this);
-    this.removeCommand = this.removeCommand.bind(this);
+    this.add = this.add.bind(this);
+    this.remove = this.remove.bind(this);
     this.search = this.search.bind(this);
   }
 
-  setSearchText(searchText: string) {
-    this.searchText = searchText.trim().toLowerCase();
-  }
-
-  addCommand(command: Command) {
+  add(command: Command) {
     this.commands.push(command);
   }
 
-  removeCommand(command: Command) {
+  remove(command: Command) {
     const index = this.commands.indexOf(command);
     this.commands.splice(index, 1);
   }
 
-  search() {
+  search(searchText: string) {
     console.log("searching");
+    searchText.trim();
 
-    if (this.searchText) {
+    if (searchText) {
       for (const command of this.commands) {
-        if (command.commandText == this.searchText) {
+        if (command.commandText == searchText) {
           //tabs can be opened
           window.close();
         }

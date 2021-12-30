@@ -18,12 +18,12 @@ let focusOptions: {
 export default observer(
   ({
     commands,
-    addCommand,
-    removeCommand,
+    add,
+    remove,
   }: {
     commands: Command[];
-    addCommand: (command: Command) => void;
-    removeCommand: (command: Command) => void;
+    add: (command: Command) => void;
+    remove: (command: Command) => void;
   }) => {
     const focusTarget = useRef(null);
 
@@ -55,7 +55,7 @@ export default observer(
                 }
               />
 
-              <TiDelete onClick={() => removeCommand(command)} />
+              <TiDelete onClick={() => remove(command)} />
 
               {/* List of URLs */}
               <ul>
@@ -85,18 +85,20 @@ export default observer(
                     })}
 
                 {/* New URL */}
-                <Input
-                  placeholder="new url..."
-                  readOnly={true}
-                  onKeyPress={(event) => {
-                    command.setURL(command.URLs.size, event.key);
-                    focusOptions = {
-                      targetType: "url",
-                      shouldMove: true,
-                      targetId: command.commandId,
-                    };
-                  }}
-                />
+                {command.expanded && (
+                  <Input
+                    placeholder="new url..."
+                    readOnly={true}
+                    onKeyPress={(event) => {
+                      command.setURL(command.URLs.size, event.key);
+                      focusOptions = {
+                        targetType: "url",
+                        shouldMove: true,
+                        targetId: command.commandId,
+                      };
+                    }}
+                  />
+                )}
               </ul>
             </li>
           );
@@ -107,7 +109,7 @@ export default observer(
           placeholder="new command..."
           readOnly={true}
           onKeyPress={(event) => {
-            addCommand(new Command(event.key));
+            add(new Command(event.key));
             focusOptions = {
               targetType: "command",
               shouldMove: true,
