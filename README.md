@@ -14,7 +14,9 @@
 
   - https://css-tricks.com/almanac/properties/c/caret-shape/
 
-- Take styling from C:\Users\lembn\OneDrive - UTC Reading\C.S\NEA\TEAMPLNR\public?
+- There's no curson on the new [x] buttons
+
+- Evaluate usage of state
 
 - Implement tab creation
 - Implement saving

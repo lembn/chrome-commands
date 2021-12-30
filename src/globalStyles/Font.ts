@@ -1,7 +1,7 @@
 import { createGlobalStyle } from "styled-components";
-import SCP_Regular from "../../fonts/SourceCodePro-Regular.ttf";
-import SCP_MediumItalic from "../../fonts/SourceCodePro-MediumItalic.ttf";
-import SCP_Bold from "../../fonts/SourceCodePro-Bold.ttf";
+import SCP_Regular from "../fonts/SourceCodePro-Regular.ttf";
+import SCP_MediumItalic from "../fonts/SourceCodePro-MediumItalic.ttf";
+import SCP_Bold from "../fonts/SourceCodePro-Bold.ttf";
 
 export default createGlobalStyle`
     @font-face {

@@ -1,15 +1,14 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { IoClose, IoSearch } from "react-icons/io5";
 import { observer } from "mobx-react-lite";
 import SearchData from "../../data/SearchData";
-import CommandListData from "../../data/CommandListData";
 import Command from "../../data/Command";
 import { animated, useSpring, useTransition } from "react-spring";
 import useOutsideClick from "../../hooks/useOutsideClick";
 import { useEffect, useRef, KeyboardEvent } from "react";
 import Result from "./Result";
 import SearchResults from "./SearchResults";
-import Text from "../../styles/Text";
+import FocusOptions from "../../data/FocusOptions";
 
 const initialContainerHeight = "3.8em";
 
@@ -42,6 +41,8 @@ const SearchInput = styled.input`
   font-family: "SourceCodePro";
   border-radius: 6px;
   background-color: transparent;
+  margin-left: 15px;
+  margin-bottom: 5px;
 
   &:focus {
     outline: none;
@@ -56,21 +57,21 @@ const SearchInput = styled.input`
   }
 `;
 
-const Icon = css`
-  color: #bebebe;
+const SearchIcon = styled.span`
   font-size: 27px;
   margin-right: 10px;
   margin-top: 6px;
   vertical-align: middle;
-`;
-
-const SearchIcon = styled.span`
-  ${Icon}
+  margin: 0;
+  color: #bebebe;
 `;
 
 const CloseIcon = styled(animated.span)`
-  ${Icon}
-
+  font-size: 27px;
+  margin-right: 10px;
+  margin-top: 6px;
+  vertical-align: middle;
+  margin: 0;
   transition: all 200ms ease-in-out;
   cursor: pointer;
 
@@ -87,7 +88,12 @@ const LineSeperator = styled.span`
 `;
 
 const WarningMessage = styled.span`
-  ${Text}
+  font-family: "SourceCodePro-Bold";
+  font-size: 15px;
+  color: #000;
+  margin-left: 10px;
+  flex: 2;
+  display: flex;
   height: 100%;
   display: flex;
   align-items: center;
@@ -99,9 +105,11 @@ const WarningMessage = styled.span`
 export default observer(
   ({
     data,
+    focusOptions,
     search,
   }: {
     data: SearchData;
+    focusOptions: FocusOptions;
     search: (command: Command) => void;
   }) => {
     const searchBarContainerRef = useRef(null);
@@ -175,6 +183,7 @@ export default observer(
           <SearchInput
             placeholder="search..."
             spellCheck="false"
+            autoFocus
             value={data.query}
             onFocus={data.open}
             onKeyDown={keyDownHandler}

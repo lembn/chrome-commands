@@ -2,7 +2,6 @@ import { observer } from "mobx-react-lite";
 import { MutableRefObject } from "react";
 import styled from "styled-components";
 import Command from "../../data/Command";
-import Text from "../../styles/Text";
 
 const ResultContainer = styled.div`
   width: 100%;
@@ -20,11 +19,20 @@ const ResultContainer = styled.div`
 `;
 
 const Name = styled.h3`
-  ${Text}
+  font-family: "SourceCodePro-Bold";
+  font-size: 15px;
+  color: #000;
+  margin-left: 10px;
+  flex: 2;
+  display: flex;
 `;
 
 const URLs = styled.h3`
-  ${Text}
+  font-size: 15px;
+  color: #000;
+  margin-left: 10px;
+  flex: 2;
+  display: flex;
   font-family: "SourceCodePro";
   font-weight: 500;
   font-style: italic;

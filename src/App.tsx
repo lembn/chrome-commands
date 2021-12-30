@@ -4,6 +4,7 @@ import Search from "./components/Search";
 import CommandListData from "./data/CommandListData";
 import SearchData from "./data/SearchData";
 import Command from "./data/Command";
+import FocusOptions from "./data/FocusOptions";
 
 const commandListData = new CommandListData([
   new Command("yt", ["youtube.com"]),
@@ -40,6 +41,8 @@ const commandListData = new CommandListData([
 ]);
 const searchData = new SearchData(commandListData.commands);
 
+const focusOptions = new FocusOptions();
+
 function search(command: Command) {
   console.log(command.commandText);
 }
@@ -47,8 +50,8 @@ function search(command: Command) {
 export default observer(() => {
   return (
     <>
-      <Search data={searchData} search={search} />
-      <CommandList data={commandListData} />
+      <Search data={searchData} search={search} focusOptions={focusOptions} />
+      <CommandList data={commandListData} focusOptions={focusOptions} />
     </>
   );
 });
