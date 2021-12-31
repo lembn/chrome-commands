@@ -4,16 +4,16 @@ import Command from "./Command";
 export default class SearchData {
   query: string = "";
   expanded: boolean = false;
-  results: Command[];
+  getResults: () => Command[];
   filteredResults: Command[] = [];
   active: number = -1;
   mouseOver: boolean = false;
 
-  constructor(results?: Command[]) {
+  constructor(getResults: () => Command[]) {
     makeAutoObservable(this);
 
-    this.results = results || [];
-    this.filteredResults = this.results;
+    this.getResults = getResults;
+    this.filteredResults = this.getResults();
 
     this.setQuery = this.setQuery.bind(this);
     this.open = this.open.bind(this);
@@ -25,7 +25,7 @@ export default class SearchData {
   setQuery(value: string) {
     this.query = value.toLowerCase().replace("  ", " ");
     this.active = -1;
-    this.filteredResults = this.results
+    this.filteredResults = this.getResults()
       .filter(
         (command: Command) => command.commandText.indexOf(this.query) > -1
       )
@@ -37,6 +37,7 @@ export default class SearchData {
   }
 
   open() {
+    this.filteredResults = this.getResults();
     this.expanded = true;
   }
 

@@ -3,55 +3,38 @@ import CommandList from "./components/CommandList";
 import Search from "./components/Search";
 import CommandListData from "./data/CommandListData";
 import SearchData from "./data/SearchData";
-import Command from "./data/Command";
 import FocusOptions from "./data/FocusOptions";
 import styled from "styled-components";
 import Scrollbar from "./components/styles/Scrollbar";
+
+function close() {
+  function replacer(key: string, value: any) {
+    const ignore = ["expanded", "commandId"];
+    if (value instanceof Map) return Array.from(value.entries());
+    else if (ignore.includes(key)) return undefined;
+    else return value;
+  }
+
+  const json = JSON.stringify(commandListData, replacer);
+  chrome.storage.sync.set({ data: json }, window.close);
+}
+
+const commandListData = new CommandListData();
+chrome.storage.sync.get("data", (storage: { [key: string]: string }) => {
+  const data = JSON.parse(storage["data"])["commands"];
+  commandListData.load(data);
+});
+const searchData = new SearchData(commandListData.getCommands);
+const focusOptions = new FocusOptions();
 
 const AppContainer = styled.div`
   ${Scrollbar}
 `;
 
-const commandListData = new CommandListData([
-  new Command("yt", ["youtube.com"]),
-  new Command("scilla", [
-    "https://ide.zilliqa.com/#/",
-    "dev-wallet.zilliqa.com/faucet?network=testnet",
-    "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
-  ]),
-  new Command("really long command name ahhhhhh"),
-  new Command("lots of links!", [
-    "https://ide.zilliqa.com/#/",
-    "dev-wallet.zilliqa.com/faucet?network=testnet",
-    "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
-    "https://ide.zilliqa.com/#/",
-    "dev-wallet.zilliqa.com/faucet?network=testnet",
-    "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
-  ]),
-  new Command("lots of links!", [
-    "https://ide.zilliqa.com/#/",
-    "dev-wallet.zilliqa.com/faucet?network=testnet",
-    "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
-    "https://ide.zilliqa.com/#/",
-    "dev-wallet.zilliqa.com/faucet?network=testnet",
-    "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
-  ]),
-  new Command("lots of links!", [
-    "https://ide.zilliqa.com/#/",
-    "dev-wallet.zilliqa.com/faucet?network=testnet",
-    "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
-    "https://ide.zilliqa.com/#/",
-    "dev-wallet.zilliqa.com/faucet?network=testnet",
-    "https://viewblock.io/zilliqa/address/zil1dlpql7kls55gnda2l5s7ys6jjz2448xdfv3tef?network=testnet&txsType=all",
-  ]),
-]);
-const searchData = new SearchData(commandListData.commands);
-const focusOptions = new FocusOptions();
-
 export default observer(() => {
   return (
     <AppContainer>
-      <Search data={searchData} />
+      <Search data={searchData} close={close} />
       <CommandList data={commandListData} focusOptions={focusOptions} />
     </AppContainer>
   );

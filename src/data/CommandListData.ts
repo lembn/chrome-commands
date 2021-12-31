@@ -1,20 +1,22 @@
-import { makeObservable, observable, action } from "mobx";
+import { makeAutoObservable } from "mobx";
 import Command from "./Command";
 
+interface SerializedCommand {
+  commandText: string;
+  URLs: [number, string][];
+  lastUsed: Date;
+}
+
 export default class CommandListData {
-  commands: Command[];
+  commands: Command[] = [];
 
-  constructor(commands?: Command[]) {
-    makeObservable(this, {
-      commands: observable,
-      add: action,
-      remove: action,
-    });
-
-    this.commands = commands || [];
+  constructor() {
+    makeAutoObservable(this);
 
     this.add = this.add.bind(this);
     this.remove = this.remove.bind(this);
+    this.getCommands = this.getCommands.bind(this);
+    this.load = this.load.bind(this);
   }
 
   add(command: Command) {
@@ -24,5 +26,20 @@ export default class CommandListData {
   remove(command: Command) {
     const index = this.commands.indexOf(command);
     this.commands.splice(index, 1);
+  }
+
+  getCommands(): Command[] {
+    return this.commands;
+  }
+
+  load(commands: SerializedCommand[]) {
+    for (const { commandText, URLs, lastUsed } of commands)
+      this.commands.push(
+        new Command(
+          commandText,
+          URLs.map(([_, URL]) => URL),
+          lastUsed
+        )
+      );
   }
 }

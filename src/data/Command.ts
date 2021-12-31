@@ -6,11 +6,10 @@ export default class Command {
   commandId: number = 0;
   commandText: string;
   URLs: Map<number, string>;
-  edited: boolean = false;
   expanded: boolean = false;
   lastUsed: Date;
 
-  constructor(command?: string, URLs?: string[]) {
+  constructor(command?: string, URLs?: string[], lastUsed?: Date) {
     makeAutoObservable(this);
 
     this.commandId = Command.commandCounter;
@@ -19,6 +18,7 @@ export default class Command {
     this.commandText = command || "";
     this.URLs = new Map<number, string>();
     if (URLs) for (let i = 0; i < URLs.length; i++) this.URLs.set(i, URLs[i]);
+    this.lastUsed = lastUsed || new Date();
 
     this.setCommandText = this.setCommandText.bind(this);
     this.setURL = this.setURL.bind(this);
