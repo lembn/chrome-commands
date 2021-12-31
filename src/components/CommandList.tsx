@@ -17,9 +17,11 @@ export default observer(
   ({
     data,
     focusOptions,
+    save,
   }: {
     data: CommandListData;
     focusOptions: FocusOptions;
+    save: () => void;
   }) => {
     const focusTarget = useRef(null);
 
@@ -32,6 +34,11 @@ export default observer(
       }
     });
 
+    useEffect(() => {
+      let timeout = setTimeout(save, 500);
+      return () => clearTimeout(timeout);
+    });
+
     return (
       // List of commands
       <CommandList>
@@ -39,7 +46,7 @@ export default observer(
           {data.commands.map((command: Command) => {
             return (
               <motion.li
-                initial={{ opacity: 0.3, x: "-100%" }}
+                initial={{ opacity: 0.3, x: "-15%" }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0.3, x: "100%" }}
                 transition={{
@@ -79,9 +86,9 @@ export default observer(
                           .map(([URLID, URL]: [URLID: number, URL: string]) => {
                             return (
                               <motion.li
-                                initial={{ opacity: 0.5, x: "-100%" }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0.5, x: "100%" }}
+                                initial={{ height: 0 }}
+                                animate={{ height: "auto" }}
+                                exit={{ opacity: 0, x: "100%" }}
                                 transition={{
                                   type: "spring",
                                   stiffness: 120,

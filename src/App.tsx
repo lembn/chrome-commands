@@ -7,7 +7,7 @@ import FocusOptions from "./data/FocusOptions";
 import styled from "styled-components";
 import Scrollbar from "./components/styles/Scrollbar";
 
-function close() {
+function save() {
   function replacer(key: string, value: any) {
     const ignore = ["expanded", "commandId"];
     if (value instanceof Map) return Array.from(value.entries());
@@ -16,8 +16,10 @@ function close() {
   }
 
   const json = JSON.stringify(commandListData, replacer);
-  chrome.storage.sync.set({ data: json }, window.close);
+  chrome.runtime.sendMessage(`save::${json}`);
 }
+
+chrome.runtime.connect({ name: "popup" });
 
 const commandListData = new CommandListData();
 chrome.storage.sync.get("data", (storage: { [key: string]: string }) => {
@@ -34,8 +36,12 @@ const AppContainer = styled.div`
 export default observer(() => {
   return (
     <AppContainer>
-      <Search data={searchData} close={close} />
-      <CommandList data={commandListData} focusOptions={focusOptions} />
+      <Search data={searchData} close={window.close} />
+      <CommandList
+        data={commandListData}
+        focusOptions={focusOptions}
+        save={save}
+      />
     </AppContainer>
   );
 });

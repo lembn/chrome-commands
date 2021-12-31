@@ -3,6 +3,9 @@
   "description": "Alias commonly accessed URLs, making them easier to search, and quickly open multiple tabs with a single search.",
   "manifest_version": 3,
   "version": "1.0",
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "index.html"
   },
